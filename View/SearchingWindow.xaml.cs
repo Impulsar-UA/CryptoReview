@@ -14,12 +14,9 @@ using System.Windows.Shapes;
 
 namespace CryptoReview.View
 {
-    /// <summary>
-    /// Логика взаимодействия для SearchingPage.xaml
-    /// </summary>
-    public partial class SearchingPage : Window
+    public partial class SearchingWindow : Window
     {
-        public SearchingPage()
+        public SearchingWindow()
         {
             InitializeComponent();
         }
