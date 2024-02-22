@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="273" Width="800">
     <Grid Margin="0,0,0,0">
-        <DataGrid d:ItemsSource="{d:SampleData ItemCount=10}" Margin="0,40,0,0" Height="216" VerticalAlignment="Top"/>
+        <DataGrid ItemsSource="{Binding TopAssets}" Margin="0,40,0,0" Height="216" VerticalAlignment="Top"/>
         <Label Content="Top 10 cryptocurrency" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top"/>
         <Button Content="All cryptocurrency" HorizontalAlignment="Left" Margin="531,13,0,0" VerticalAlignment="Top"/>
         <Button Content="🔍Search cryptocurrency" HorizontalAlignment="Left" Margin="646,13,0,0" VerticalAlignment="Top"/>

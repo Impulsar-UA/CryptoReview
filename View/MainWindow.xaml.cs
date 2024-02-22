@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CryptoReview.ViewModel;
 
 namespace CryptoReview.View
 {
@@ -15,6 +16,7 @@ namespace CryptoReview.View
     {
         public MainWindow()
         {
+            DataContext = new MainViewModel();
             InitializeComponent();
         }
     }
