@@ -16,7 +16,7 @@ namespace CryptoReview.View
     {
         public MainWindow()
         {
-            DataContext = new MainViewModel();
+            DataContext = VMController.MainVM;
             InitializeComponent();
         }
     }

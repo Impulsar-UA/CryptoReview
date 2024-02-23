@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CryptoReview.View"
         xmlns:ViewModel="clr-namespace:CryptoReview.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="447" Width="909" Background="#2B2B2B">
+        Title="" Height="447" Width="909" Background="#2B2B2B">
     <Window.Resources>
         <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -114,7 +114,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="0,0,0,4">
-        <DataGrid ItemsSource="{Binding TopAssets}" Style="{StaticResource DataGridStyle}" Margin="10,71,274,0" Height="340" VerticalAlignment="Top" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding TopAssets}" Style="{StaticResource DataGridStyle}" Margin="10,71,217,0" Height="340" VerticalAlignment="Top" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
                 <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}"/>
@@ -135,13 +135,22 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="MCAP (USD)" Binding="{Binding MarketCapUsd, Converter={StaticResource ValueSuffixConverter}}"/>
                 <DataGridTextColumn Header="Trading volume (USD,24h)" Binding="{Binding VolumeUsd24Hr, Converter={StaticResource ValueSuffixConverter}}"/>
+                <DataGridTemplateColumn Header="Supply">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Symbol}"/>
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="{Binding Supply, Converter={StaticResource ValueSuffixConverter}}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="Top 10 cryptocurrency"  HorizontalAlignment="Center"  Margin="0,22,0,0"  VerticalAlignment="Top" Foreground="White" FontSize="18" FontWeight="Bold"/>
-        <Button Content="🔍All cryptocurrencies" Margin="708,113,38,0" VerticalAlignment="Top" Height="31" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="Сrypto Markets" Margin="708,297,38,0" VerticalAlignment="Top" Height="34" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="🔍Update info" Margin="39,31,741,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-
-
+        <Button Content="🔍All cryptocurrencies" Command= "{Binding GoToFullCryptoListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="708,72,38,0" VerticalAlignment="Top" Height="31" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="🛒 Сrypto Markets" Margin="708,134,38,0" VerticalAlignment="Top" Height="34" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="🔄 Update info" Command="{Binding UpdateTop10Command}"  Margin="39,31,741,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
     </Grid>
 </Window>

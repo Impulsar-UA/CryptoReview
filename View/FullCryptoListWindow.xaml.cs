@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CryptoReview.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,13 +15,11 @@ using System.Windows.Shapes;
 
 namespace CryptoReview.View
 {
-    /// <summary>
-    /// Логика взаимодействия для FullCryptoListWindow.xaml
-    /// </summary>
     public partial class FullCryptoListWindow : Window
     {
         public FullCryptoListWindow()
         {
+            DataContext = VMController.MainVM;
             InitializeComponent();
         }
     }

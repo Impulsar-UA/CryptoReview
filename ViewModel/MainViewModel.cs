@@ -1,14 +1,22 @@
 ﻿using CryptoReview.Model;
+using CryptoReview.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CryptoReview.ViewModel
 {
-    public class MainViewModel
+    public static class VMController
+    {
+        public static MainViewModel MainVM = new();
+    }
+    public partial class MainViewModel
     {
         public MainViewModel () 
         {
@@ -27,7 +35,26 @@ namespace CryptoReview.ViewModel
             await GetAssetsList();
             if (TopAssets != null) { TopAssets.Clear(); }
             for (int i = 0; i < 10; i++)
-                TopAssets.Add(AssetsList[i]);
+            TopAssets.Add(AssetsList[i]);
+        }
+
+        private void UpdateTop10()
+        {
+            GetTopAssets();
+        }
+        private RelayCommand? _updateTop10Command;
+        public RelayCommand UpdateTop10Command
+        {
+            get
+            {
+                return _updateTop10Command ?? (_updateTop10Command = new RelayCommand(obj => UpdateTop10()));
+            }
+        }      
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
