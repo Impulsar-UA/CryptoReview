@@ -89,6 +89,10 @@ namespace CryptoReview.ViewModel
             }
             else { GetAllAssets(); }
         }
+        public async void UpdateAsset() 
+        {
+           await GetAsset(AssetId);
+        }
 
         private RelayCommand? _updateTop10Command;
         public RelayCommand UpdateTop10Command
@@ -121,6 +125,14 @@ namespace CryptoReview.ViewModel
             get
             {
                 return _searchAssetCommand ?? (_searchAssetCommand = new RelayCommand(obj => SearchAsset()));
+            }
+        }
+        private RelayCommand? _updateAssetCommand;
+        public RelayCommand UpdateAssetCommand
+        {
+            get
+            {
+                return _updateAssetCommand ?? (_updateAssetCommand = new RelayCommand(obj => UpdateAsset()));
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -39,9 +39,20 @@
         <Label Content="VWAP (24h,USD)" Foreground="White" HorizontalAlignment="Left" Margin="26,191,0,0" VerticalAlignment="Top"/>
         <Label Content="{Binding AssetVolumeUsd24Hr}" Foreground="White" HorizontalAlignment="Left" Margin="147,165,0,0" VerticalAlignment="Top"/>
         <Label Content="{Binding AssetVwap24Hr}" Foreground="White" HorizontalAlignment="Left" Margin="147,191,0,0" VerticalAlignment="Top"/>
-        <Label Content="Asset Exploerer:"  Foreground="White" HorizontalAlignment="Left" Margin="279,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247"/>
-        <Label Content="{Binding AssetExplorer}" MouseLeftButtonDown="LabelUrlClick" Foreground="White" HorizontalAlignment="Left" Margin="378,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="318"/>
-
+        <Label Content="Asset Exploerer:"  Foreground="White" HorizontalAlignment="Left" Margin="225,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="94"/>
+        <Label Content="{Binding AssetExplorer}" MouseLeftButtonDown="LabelUrlClick" HorizontalAlignment="Left" Margin="324,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="459">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="Blue"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <Button Content="🔄 Update info" Command="{Binding UpdateAssetCommand}"  Margin="655,372,17,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
 
     </Grid>
 </Window>
