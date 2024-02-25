@@ -115,7 +115,7 @@
     </Window.Resources>
     <Grid>
         <Button Content="🔄 Update info" Command="{Binding UpdateMarketsCommand}"  Margin="39,31,1028,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <DataGrid ItemsSource="{Binding CryptoMarkets}" Style="{StaticResource DataGridStyle}" Margin="10,71,10,0" Height="340" VerticalAlignment="Top" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding CryptoMarkets}" Style="{StaticResource DataGridStyle}" Margin="10,71,10,10" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
                 <DataGridTextColumn Header="BaseSymbol" Binding="{Binding BaseSymbol}"/>

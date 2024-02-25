@@ -118,7 +118,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
                 <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="Price (USD)" Binding="{Binding PriceUsd, Converter={StaticResource ValueSuffixConverter}}"/>
                 <DataGridTextColumn Header="Price Change (%,24h)" Binding="{Binding ChangePercent24Hr, Converter={StaticResource PriceChangeConverter}}">
                     <DataGridTextColumn.ElementStyle>
@@ -147,6 +147,9 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenAssetWindowCommand}" CommandParameter="{Binding SelectedItem.Id, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+            </DataGrid.InputBindings>
         </DataGrid>
         <Label Content="Top 10 cryptocurrency"  HorizontalAlignment="Center"  Margin="0,22,0,0"  VerticalAlignment="Top" Foreground="White" FontSize="18" FontWeight="Bold"/>
         <Button Content="🔍All cryptocurrencies" Command= "{Binding GoToFullCryptoListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="733,72,38,0" VerticalAlignment="Top" Height="31" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>

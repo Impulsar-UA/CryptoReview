@@ -33,6 +33,19 @@ namespace CryptoReview.ViewModel
         public ObservableCollection<Asset> TopAssets { get; set; }
         public ObservableCollection<Asset> AllAssets { get; set; }
         public ObservableCollection<Market> CryptoMarkets { get; set; }
+        private string _searchText;
+        public string SearchText
+        {
+            get
+            {
+                return _searchText;
+            }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+            }
+        }
         public async Task GetAssetsList() 
         {
             AssetsList = await _myHttpClient.GetAllAssetsAsync();
@@ -52,7 +65,7 @@ namespace CryptoReview.ViewModel
         {
             await GetMarketsList();
             if (CryptoMarkets != null) { CryptoMarkets.Clear(); }
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < MarketsList.Count; i++)
                 CryptoMarkets.Add(MarketsList[i]);
         }
         public async void GetAllAssets()
@@ -61,6 +74,20 @@ namespace CryptoReview.ViewModel
             if (AllAssets != null) { AllAssets.Clear(); }
             for (int i = 0; i < AssetsList.Count; i++)
                 AllAssets.Add(AssetsList[i]);
+        }
+        private async void SearchAsset() 
+        {
+            await GetAssetsList();
+            if (SearchText != null) 
+            { 
+            AllAssets.Clear();
+
+                foreach (var asset in AssetsList.Where(a => a.Name.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0 || a.Symbol.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    AllAssets.Add(asset);
+            }
+            }
+            else { GetAllAssets(); }
         }
 
         private RelayCommand? _updateTop10Command;
@@ -85,6 +112,15 @@ namespace CryptoReview.ViewModel
             get
             {
                 return _updateMarketsCommand ?? (_updateMarketsCommand = new RelayCommand(obj => GetAllMarkets()));
+            }
+        }
+
+        private RelayCommand? _searchAssetCommand;
+        public RelayCommand SearchAssetCommand
+        {
+            get
+            {
+                return _searchAssetCommand ?? (_searchAssetCommand = new RelayCommand(obj => SearchAsset()));
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;

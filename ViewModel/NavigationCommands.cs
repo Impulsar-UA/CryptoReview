@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace CryptoReview.ViewModel
 {
@@ -23,6 +24,20 @@ namespace CryptoReview.ViewModel
             get
             {
                 return _goToFullCryptoListCommand ?? (_goToFullCryptoListCommand = new RelayCommand(obj => GoToFullCryptoList(obj as Window)));
+            }
+        }
+        private async void OpenAssetWindow(string assetId)
+        {
+            await GetAsset(assetId);
+            AssetWindow window = new();     
+            window.Show();
+        }
+        private RelayCommand? _openAssetWindowCommand;
+        public RelayCommand OpenAssetWindowCommand
+        {
+            get
+            {
+                return _openAssetWindowCommand ?? (_openAssetWindowCommand = new RelayCommand(obj => OpenAssetWindow(obj as string)));
             }
         }
         private static void GoToMarketsList(Window CurrentWindow)

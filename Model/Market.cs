@@ -14,9 +14,9 @@ namespace CryptoReview.Model
         public string QuoteSymbol { get; set; }
         public string QuoteId { get; set; }
         public double PriceQuote { get; set; }
-        public double PriceUsd { get; set; }
-        public double VolumeUsd24Hr { get; set; }
-        public double PercentExchangeVolume { get; set; }
+        public double? PriceUsd { get; set; }
+        public double? VolumeUsd24Hr { get; set; }
+        public double? PercentExchangeVolume { get; set; }
         public int? TradesCount24Hr { get; set; }
         public long Updated { get; set; }
     }
