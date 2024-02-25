@@ -89,32 +89,29 @@ namespace CryptoReview.Model
                 return null;
             }
         }
-        public async Task<string> GetAssetMarketsAsync(string Id)
-        {
-            return await SendGetRequest($"https://api.coincap.io/v2/assets/{Id}/markets");
-        }
-
-        private async Task<string?> SendGetRequest(string apiUrl)
+        public async Task<List<Market>> GetMarketsAsync()
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+                HttpResponseMessage response = await _client.GetAsync("https://api.coincap.io/v2/markets");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsStringAsync();
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    var marketsData = JsonConvert.DeserializeObject<MarketsData>(responseData);
+                    return marketsData?.Data;
                 }
                 else
                 {
-                    MessageBox.Show("Error", "Http request error: " + response.StatusCode, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Http request error: " + response.StatusCode, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error", "Error: " + ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show( "Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
-        }
+        }      
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="CryptoReview.View.MainWindow"
+﻿<Window x:Class="CryptoReview.View.CryptoMarketsListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:CryptoReview.View"
         xmlns:ViewModel="clr-namespace:CryptoReview.ViewModel"
         mc:Ignorable="d"
-        Title="" Height="447" Width="909" Background="#2B2B2B">
+        Title="" Height="450" Width="1269" Background="#2B2B2B">
     <Window.Resources>
         <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:System="clr-namespace:System;assembly=mscorlib">
             <Style x:Key="DataGridStyle" TargetType="{x:Type DataGrid}">
                 <Setter Property="Background" Value="#2B2B2B"/>
                 <Setter Property="Foreground" Value="White"/>
@@ -113,44 +113,23 @@
             <ViewModel:ValueSuffixConverter x:Key="ValueSuffixConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="0,0,-36,4">
-        <DataGrid ItemsSource="{Binding TopAssets}" Style="{StaticResource DataGridStyle}" Margin="10,71,217,0" Height="340" VerticalAlignment="Top" AutoGenerateColumns="False">
+    <Grid>
+        <Button Content="🔄 Update info" Command="{Binding UpdateMarketsCommand}"  Margin="39,31,1028,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <DataGrid ItemsSource="{Binding CryptoMarkets}" Style="{StaticResource DataGridStyle}" Margin="10,71,10,0" Height="340" VerticalAlignment="Top" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
-                <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="BaseSymbol" Binding="{Binding BaseSymbol}"/>
+                <DataGridTextColumn Header="Exchange Id" Binding="{Binding ExchangeId}"/>
+                <DataGridTextColumn Header="Base Id" Binding="{Binding BaseId}"/>
+                <DataGridTextColumn Header="Quote Symbol" Binding="{Binding QuoteSymbol}"/>
+                <DataGridTextColumn Header="Quote Id" Binding="{Binding QuoteId}"/>
+                <DataGridTextColumn Header="Price Quote (USD)" Binding="{Binding PriceQuote, Converter={StaticResource ValueSuffixConverter}}"/>
                 <DataGridTextColumn Header="Price (USD)" Binding="{Binding PriceUsd, Converter={StaticResource ValueSuffixConverter}}"/>
-                <DataGridTextColumn Header="Price Change (%,24h)" Binding="{Binding ChangePercent24Hr, Converter={StaticResource PriceChangeConverter}}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource ChangeColorConverter}">
-                                        <Binding Path="ChangePercent24Hr" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="MCAP (USD)" Binding="{Binding MarketCapUsd, Converter={StaticResource ValueSuffixConverter}}"/>
-                <DataGridTextColumn Header="Trading volume (USD,24h)" Binding="{Binding VolumeUsd24Hr, Converter={StaticResource ValueSuffixConverter}}"/>
-                <DataGridTemplateColumn Header="Supply">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Supply, Converter={StaticResource ValueSuffixConverter}}"/>
-                                <TextBlock Text=" "/>
-                                <TextBlock Text="{Binding Symbol}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Volume (USD,24h)" Binding="{Binding VolumeUsd24Hr, Converter={StaticResource ValueSuffixConverter}}"/>
+                <DataGridTextColumn Header="Exchange Volume (%)" Binding="{Binding PercentExchangeVolume}"/>
+                <DataGridTextColumn Header="Trades Count (24h)" Binding="{Binding TradesCount24Hr}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Label Content="Top 10 cryptocurrency"  HorizontalAlignment="Center"  Margin="0,22,0,0"  VerticalAlignment="Top" Foreground="White" FontSize="18" FontWeight="Bold"/>
-        <Button Content="🔍All cryptocurrencies" Command= "{Binding GoToFullCryptoListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="733,72,38,0" VerticalAlignment="Top" Height="31" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="🛒 Сrypto Markets" Command= "{Binding GoToMarketsListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="738,134,43,0" VerticalAlignment="Top" Height="34" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="🔄 Update info" Command="{Binding UpdateTop10Command}"  Margin="39,31,741,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="Back to main menu" Command= "{Binding GoToMainMenuCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="1059,10,10,0" VerticalAlignment="Top" Height="24" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
     </Grid>
 </Window>

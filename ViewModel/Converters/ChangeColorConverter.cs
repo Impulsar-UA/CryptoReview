@@ -21,14 +21,14 @@ namespace CryptoReview.ViewModel
             if (changeValue == null)
                 return Brushes.White;
 
-            if (changeValue.StartsWith("0"))
-                return Brushes.Green;
-            else if (changeValue.StartsWith("-"))
+            if (changeValue.StartsWith("-"))
                 return Brushes.Red;
-            else if (changeValue.StartsWith("0.00"))
+            else if(changeValue.StartsWith("-+"))
                 return Brushes.White;
             else
-                return Brushes.White;
+                return Brushes.Green;
+            
+
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

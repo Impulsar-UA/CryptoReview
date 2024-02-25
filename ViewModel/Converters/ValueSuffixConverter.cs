@@ -33,10 +33,10 @@ namespace CryptoReview.ViewModel
                 number /= 1_000;
                 suffix = "K";
             }
-
-            double roundedNumber = Math.Round(number, 3);
-
-            string formattedValue = roundedNumber.ToString("0.###", CultureInfo.InvariantCulture) + suffix;
+            string formattedValue;
+            double roundedNumber = Math.Round(number, 4);
+            if (value is double doubleValue && doubleValue < 1) { formattedValue = value.ToString().TrimEnd('0'); return formattedValue; }
+             formattedValue = roundedNumber.ToString("0.###", CultureInfo.InvariantCulture) + suffix;
 
             return formattedValue;
         }
