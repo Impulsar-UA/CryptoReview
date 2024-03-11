@@ -12,35 +12,12 @@
         <ViewModel:ChangeColorConverter x:Key="ChangeColorConverter"/>
     </Window.Resources>
     <Grid>
-        <Label Content="{Binding AssetName}"  Foreground="White" FontSize="18" HorizontalAlignment="Left" Margin="38,20,0,0" VerticalAlignment="Top"/>
-        <Label Content="Supply" Foreground="White" HorizontalAlignment="Left" Margin="474,112,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding AssetSupply}"  Foreground="White"  HorizontalAlignment="Left" Margin="594,112,0,0" VerticalAlignment="Top"/>
-        <Label Content="Max Supply" Foreground="White" HorizontalAlignment="Left" Margin="474,138,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding AssetMaxSupply}"  Foreground="White"  HorizontalAlignment="Left" Margin="594,141,0,0" VerticalAlignment="Top"/>
-        <Label Content="Price (USD)"  Foreground="White" HorizontalAlignment="Left" Margin="26,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247"/>
-        <Label Content="{Binding AssetPriceUsd}"  Foreground="White" HorizontalAlignment="Left" Margin="117,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.612,0.644"/>
-        <Label Content="Price change (%)"  Foreground="White" HorizontalAlignment="Left" Margin="26,104,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247"/>
-        <Label Content="{Binding AssetChangePercent24Hr, Converter={StaticResource PriceChangeConverter}}" HorizontalAlignment="Left" Margin="129,104,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.612,0.644">
-            <Label.Style>
-                <Style TargetType="Label">
-                    <Setter Property="Foreground">
-                        <Setter.Value>
-                            <MultiBinding Converter="{StaticResource ChangeColorConverter}">
-                                <Binding Path="AssetChangePercent24Hr" />
-                            </MultiBinding>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Label.Style>
-        </Label>
-        <Label Content="Market capitalisation (USD)" Foreground="White" HorizontalAlignment="Left" Margin="474,62,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding AssetMarketCapUsd}" Foreground="White" HorizontalAlignment="Left" Margin="626,62,0,0" VerticalAlignment="Top"/>
-        <Label Content="Volume (24h,USD)" Foreground="White" HorizontalAlignment="Left" Margin="26,165,0,0" VerticalAlignment="Top"/>
-        <Label Content="VWAP (24h,USD)" Foreground="White" HorizontalAlignment="Left" Margin="26,191,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding AssetVolumeUsd24Hr}" Foreground="White" HorizontalAlignment="Left" Margin="147,165,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding AssetVwap24Hr}" Foreground="White" HorizontalAlignment="Left" Margin="147,191,0,0" VerticalAlignment="Top"/>
-        <Label Content="Asset Exploerer:"  Foreground="White" HorizontalAlignment="Left" Margin="225,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="94"/>
-        <Label Content="{Binding AssetExplorer}" MouseLeftButtonDown="LabelUrlClick" HorizontalAlignment="Left" Margin="324,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="459">
+
+        <Label Content="{Binding AssetName, FallbackValue=AssetName}"  Foreground="White" FontSize="18" HorizontalAlignment="Left" Margin="26,20,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding AssetSymbol, FallbackValue=AssetSymbol}"  Foreground="LightGray" FontSize="12" HorizontalAlignment="Left" Margin="131,26,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="Asset Exploerer:"  Foreground="White" HorizontalAlignment="Left" Margin="242,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="94"/>
+        <Label Content="{Binding AssetExplorer, FallbackValue=Value}" MouseLeftButtonDown="LabelUrlClick" HorizontalAlignment="Left" Margin="341,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.502,1.247" Width="459">
             <Label.Style>
                 <Style TargetType="Label">
                     <Setter Property="Foreground" Value="Blue"/>
@@ -52,7 +29,76 @@
                 </Style>
             </Label.Style>
         </Label>
-        <Button Content="🔄 Update info" Command="{Binding UpdateAssetCommand}"  Margin="655,372,17,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="🔄 Update info" Command="{Binding UpdateAssetCommand}"  Margin="662,3,10,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Grid Margin="10,77,10,133">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="230"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="0" >
+                <Label Content="Price (USD)"  Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="1">
+                <Label Content="{Binding AssetPriceUsd, FallbackValue=Value}"  Foreground="White"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="0">
+                <Label Content="Price change (%)"  Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="1">
+                <Label Content="{Binding AssetChangePercent24Hr, FallbackValue=Value, Converter={StaticResource PriceChangeConverter}}">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource ChangeColorConverter}">
+                                        <Binding Path="AssetChangePercent24Hr" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="0">
+                <Label Content="Supply" Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="1">
+                <Label Content="{Binding AssetSupply, FallbackValue=Value}" Foreground="White"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="3" Grid.Column="0" >
+                <Label Content="Max Supply" Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="3" Grid.Column="1">
+                <Label Content="{Binding AssetMaxSupply, FallbackValue=Value}"  Foreground="White"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="2" >
+                <Label Content="Market capitalisation (USD)" Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="3">
+                <Label Content="{Binding AssetMarketCapUsd, FallbackValue=Value}" Foreground="White"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="2">
+                <Label Content="VWAP (24h,USD)" Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="3">
+                <Label Content="{Binding AssetVolumeUsd24Hr, FallbackValue=Value}" Foreground="White"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="2" >
+                <Label Content="Market capitalisation (USD)" Foreground="Yellow"/>
+            </Border>
+            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="3">
+                <Label Content="{Binding AssetVwap24Hr, FallbackValue=Value}"  Foreground="White"/>
+            </Border>
+        </Grid>
     </Grid>
+
 </Window>
