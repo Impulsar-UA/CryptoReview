@@ -113,8 +113,9 @@
             <ViewModel:ValueSuffixConverter x:Key="ValueSuffixConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="0,0,-36,4">
-        <DataGrid ItemsSource="{Binding TopAssets}" Style="{StaticResource DataGridStyle}" Margin="10,71,217,0" Height="340" VerticalAlignment="Top" AutoGenerateColumns="False">
+    <Grid Margin="0,0,0,4">
+        <Image Source="Images/background-2.jpg" Stretch="Fill" Opacity="0.4" Grid.RowSpan="3"/>
+        <DataGrid ItemsSource="{Binding TopAssets}" Style="{StaticResource DataGridStyle}" Margin="10,71,181,0" Height="346" VerticalAlignment="Top" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
                 <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}"/>
@@ -152,8 +153,8 @@
             </DataGrid.InputBindings>
         </DataGrid>
         <Label Content="Top 10 cryptocurrency"  HorizontalAlignment="Center"  Margin="0,22,0,0"  VerticalAlignment="Top" Foreground="White" FontSize="18" FontWeight="Bold"/>
-        <Button Content="🔍All cryptocurrencies" Command= "{Binding GoToFullCryptoListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="733,72,38,0" VerticalAlignment="Top" Height="31" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="🛒 Сrypto Markets" Command= "{Binding GoToMarketsListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="738,134,43,0" VerticalAlignment="Top" Height="34" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="🔍All cryptocurrencies" Command= "{Binding GoToFullCryptoListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="733,72,10,0" VerticalAlignment="Top" Height="31" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="🛒 Сrypto Markets" Command= "{Binding GoToMarketsListCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="738,134,10,0" VerticalAlignment="Top" Height="34" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
         <Button Content="🔄 Update info" Command="{Binding UpdateTop10Command}"  Margin="39,31,741,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
     </Grid>
 </Window>

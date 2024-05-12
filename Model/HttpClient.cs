@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using static CryptoReview.Model.Asset;
 
 namespace CryptoReview.Model
 {
@@ -33,13 +34,13 @@ namespace CryptoReview.Model
                 }
                 else
                 {
-                    MessageBox.Show("Error", "Http request error: " + response.StatusCode, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Http request error: " + response.StatusCode, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error", "Error: " + ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }
@@ -57,35 +58,41 @@ namespace CryptoReview.Model
                 }
                 else
                 {
-                    MessageBox.Show("Error", "Http request error: " + response.StatusCode, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Http request error: " + response.StatusCode,"Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error", "Error: " + ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }
-        public async Task<string> GetAssetHistoryAsync(string Id)
+        public async Task<List<AssetHistoryEntry>> GetAssetHistoryAsync(string Id)
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync($"https://api.coincap.io/v2/assets/{Id}/history");
+                HttpResponseMessage response = await _client.GetAsync($"https://api.coincap.io/v2/assets/{Id}/history?interval=d1");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsStringAsync();
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    var settings = new JsonSerializerSettings
+                    {
+                        Converters = new List<JsonConverter> { new UnixMillisecondsDateTimeConverter() }
+                    };
+                    var responseObject = JsonConvert.DeserializeObject<AssetHistory>(jsonString, settings);
+                    return responseObject.Data;
                 }
                 else
                 {
-                    MessageBox.Show("Error", "Http request error: " + response.StatusCode, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Http request error: " + response.StatusCode,"Error",  MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error", "Error: " + ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: "+ ex.Message , "Error" , MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }

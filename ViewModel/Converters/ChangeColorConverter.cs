@@ -13,7 +13,7 @@ namespace CryptoReview.ViewModel
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values == null )
+            if (values[0] == null )
                 return Brushes.White;
 
             string changeValue = values[0].ToString();

@@ -20,6 +20,16 @@ namespace CryptoReview.Model
         public double? ChangePercent24Hr { get; set; }
         public double? Vwap24Hr { get; set; }
         public string? Explorer { get; set; }
+        public class AssetHistory
+        {
+            public List<AssetHistoryEntry> Data { get; set; }
+            public long Timestamp { get; set; }
+        }
+    }
+    public class AssetHistoryEntry
+    {
+        public decimal PriceUsd { get; set; }
+        public DateTimeOffset Time { get; set; }
     }
     public class AssetsData
     {

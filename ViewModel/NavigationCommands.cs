@@ -28,8 +28,7 @@ namespace CryptoReview.ViewModel
         }
         private async void OpenAssetWindow(string assetId)
         {
-            await GetAsset(assetId);
-            AssetWindow window = new();     
+            AssetWindow window = new(assetId);     
             window.Show();
         }
         private RelayCommand? _openAssetWindowCommand;

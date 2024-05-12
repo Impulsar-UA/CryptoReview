@@ -114,8 +114,17 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Button Content="🔄 Update info" Command="{Binding UpdateAllAssetsCommand}"  Margin="39,31,627,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <DataGrid ItemsSource="{Binding AllAssets}" Style="{StaticResource DataGridStyle}" Margin="10,71,10,23" AutoGenerateColumns="False">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="20" Height="67*"/>
+            <RowDefinition MinHeight="20" Height="35*"/>
+            <RowDefinition MinHeight="300" Height="332*"/>
+        </Grid.RowDefinitions>
+        <Image Source="Images/background-2.jpg" Stretch="Fill"  Opacity="0.4" Grid.RowSpan="3" />
+        <Button Content="Back to main menu" Command= "{Binding GoToMainMenuCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="676,10,10,0" VerticalAlignment="Top" Height="24" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="0"/>
+        <Button Content="🔄 Update info" Command="{Binding UpdateAllAssetsCommand}"  Margin="10,0,700,0" VerticalAlignment="Center" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Button Content="🔍" Command="{Binding SearchAssetCommand}" HorizontalAlignment="Left"  Background="#3E3E3E" Foreground="White"  VerticalAlignment="Top" Height="22" Width="39" Grid.Row="1" Margin="550,1,0,0"/>
+        <TextBox HorizontalAlignment="Center"  TextWrapping="Wrap" Text="{Binding SearchText}" Background="#3E3E3E" Foreground="White" VerticalAlignment="Top" Width="253" Height="22" Grid.Row="1"/>
+        <DataGrid ItemsSource="{Binding AllAssets}" Style="{StaticResource DataGridStyle}" Margin="12,10,8,10" AutoGenerateColumns="False" Grid.Row="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
                 <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}"/>
@@ -123,7 +132,7 @@
                 <DataGridTextColumn Header="Price (USD)" Binding="{Binding PriceUsd, Converter={StaticResource ValueSuffixConverter}}"/>
                 <DataGridTextColumn Header="Price Change (%,24h)" Binding="{Binding ChangePercent24Hr, Converter={StaticResource PriceChangeConverter}}">
                     <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Foreground">
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource ChangeColorConverter}">
@@ -152,8 +161,5 @@
                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenAssetWindowCommand}" CommandParameter="{Binding SelectedItem.Id, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
             </DataGrid.InputBindings>
         </DataGrid>
-        <Button Content="Back to main menu" Command= "{Binding GoToMainMenuCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="676,10,10,0" VerticalAlignment="Top" Height="24" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="🔍" Command="{Binding SearchAssetCommand}" HorizontalAlignment="Left" Margin="551,44,0,0" Background="#3E3E3E" Foreground="White"  VerticalAlignment="Top" Height="22" Width="39"/>
-        <TextBox HorizontalAlignment="Left" Margin="298,44,0,0" TextWrapping="Wrap" Text="{Binding SearchText}" Background="#3E3E3E" Foreground="White" VerticalAlignment="Top" Width="253" Height="22"/>
     </Grid>
 </Window>

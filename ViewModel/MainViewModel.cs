@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CryptoReview.ViewModel
 {
@@ -16,7 +17,7 @@ namespace CryptoReview.ViewModel
     {
         public static MainViewModel MainVM = new();
     }
-    public partial class MainViewModel
+    public partial class MainViewModel : INotifyPropertyChanged
     {
         public MainViewModel () 
         {
@@ -27,7 +28,7 @@ namespace CryptoReview.ViewModel
          GetAllAssets();
          GetAllMarkets();
         }
-        private MyHttpClient _myHttpClient = new MyHttpClient();
+        public MyHttpClient _myHttpClient = new MyHttpClient();
         public List<Asset> AssetsList { get; set; }
         public List<Market> MarketsList { get; set; }
         public ObservableCollection<Asset> TopAssets { get; set; }
@@ -75,7 +76,7 @@ namespace CryptoReview.ViewModel
             for (int i = 0; i < AssetsList.Count; i++)
                 AllAssets.Add(AssetsList[i]);
         }
-        private async void SearchAsset() 
+        public async void SearchAsset() 
         {
             await GetAssetsList();
             if (SearchText != null) 
@@ -89,11 +90,8 @@ namespace CryptoReview.ViewModel
             }
             else { GetAllAssets(); }
         }
-        public async void UpdateAsset() 
-        {
-           await GetAsset(AssetId);
-        }
 
+        
         private RelayCommand? _updateTop10Command;
         public RelayCommand UpdateTop10Command
         {
@@ -125,14 +123,6 @@ namespace CryptoReview.ViewModel
             get
             {
                 return _searchAssetCommand ?? (_searchAssetCommand = new RelayCommand(obj => SearchAsset()));
-            }
-        }
-        private RelayCommand? _updateAssetCommand;
-        public RelayCommand UpdateAssetCommand
-        {
-            get
-            {
-                return _updateAssetCommand ?? (_updateAssetCommand = new RelayCommand(obj => UpdateAsset()));
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -1,22 +1,32 @@
 ﻿using CryptoReview.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static CryptoReview.Model.Asset;
 
 namespace CryptoReview.ViewModel
 {
-    public partial class MainViewModel
+    public class AssetViewModel : INotifyPropertyChanged
     {
+        private MyHttpClient _myHttpClient = new MyHttpClient();
+        public AssetViewModel(string assetName)
+        {
+            AssetHistory = new ObservableCollection<AssetHistoryEntry>();
+        }
+        public ObservableCollection<AssetHistoryEntry> AssetHistory { get; set; }
         private string _assetId;
         public string AssetId
         {
             get { return _assetId; }
             set
             {
-                    _assetId = value;
-                    OnPropertyChanged(nameof(AssetId));
+                _assetId = value;
+                OnPropertyChanged(nameof(AssetId));
             }
         }
         private int _assetRank;
@@ -25,8 +35,8 @@ namespace CryptoReview.ViewModel
             get { return _assetRank; }
             set
             {
-                    _assetRank = value;
-                    OnPropertyChanged(nameof(AssetRank));
+                _assetRank = value;
+                OnPropertyChanged(nameof(AssetRank));
             }
         }
         private string _assetSymbol;
@@ -48,8 +58,8 @@ namespace CryptoReview.ViewModel
             get { return _assetName; }
             set
             {
-                    _assetName = value;
-                    OnPropertyChanged(nameof(AssetName));
+                _assetName = value;
+                OnPropertyChanged(nameof(AssetName));
             }
         }
         private double _assetSupply;
@@ -156,11 +166,56 @@ namespace CryptoReview.ViewModel
                 }
             }
         }
-
-        public async Task GetAsset(string name)
+        private string _searchingDate;
+        public string? SearchingDate
         {
-            Asset asset = await _myHttpClient.GetAssetByIDAsync(name);
+            get { return _searchingDate; }
+            set
+            {
+                if (_searchingDate != value)
+                {
+                    _searchingDate = value;
+                    OnPropertyChanged(nameof(SearchingDate));
+                }
+            }
+        }
+
+        private string _foundedPrice;
+        public string FoundedPrice
+        {
+            get { return _foundedPrice; }
+            set
+            {
+                if (_foundedPrice != value)
+                {
+                    _foundedPrice = value;
+                    OnPropertyChanged(nameof(FoundedPrice));
+                }
+            }
+        }
+        public async Task UpdateAsset(string assetName)
+        {
+
+                Asset asset = await VMController.MainVM._myHttpClient.GetAssetByIDAsync(assetName);
+                AssetId = asset.Id;
+                await LoadAssetHistory();
+                AssetRank = asset.Rank;
+                AssetSymbol = asset.Symbol;
+                AssetName = asset.Name;
+                AssetSupply = asset.Supply;
+                AssetMaxSupply = asset.MaxSupply;
+                AssetMarketCapUsd = asset.MarketCapUsd;
+                AssetVolumeUsd24Hr = asset.VolumeUsd24Hr;
+                AssetPriceUsd = asset.PriceUsd;
+                AssetChangePercent24Hr = asset.ChangePercent24Hr;
+                AssetVwap24Hr = asset.Vwap24Hr;
+                AssetExplorer = asset.Explorer;
+        }
+        public async Task UpdateAsset()
+        {
+            Asset asset = await _myHttpClient.GetAssetByIDAsync(AssetId);
             AssetId = asset.Id;
+            await LoadAssetHistory();
             AssetRank = asset.Rank;
             AssetSymbol = asset.Symbol;
             AssetName = asset.Name;
@@ -172,6 +227,63 @@ namespace CryptoReview.ViewModel
             AssetChangePercent24Hr = asset.ChangePercent24Hr;
             AssetVwap24Hr = asset.Vwap24Hr;
             AssetExplorer = asset.Explorer;
+        }
+        private RelayCommand? _updateAssetCommand;
+        public RelayCommand UpdateAssetCommand
+        {
+            get
+            {
+                return _updateAssetCommand ?? (_updateAssetCommand = new RelayCommand(obj => UpdateAsset()));
+            }
+        }
+
+        private async Task LoadAssetHistory()
+        {
+            AssetHistory.Clear();
+            var historyList = await VMController.MainVM._myHttpClient.GetAssetHistoryAsync(AssetId);
+            foreach (var item in historyList)
+            {
+                AssetHistory.Add(item);
+            }
+        }
+        public void SearchPrice()
+        {
+            if (string.IsNullOrWhiteSpace(SearchingDate))
+            {
+                FoundedPrice = "Please enter a valid date.";
+                return;
+            }
+
+            if (!DateTimeOffset.TryParse(SearchingDate, out DateTimeOffset searchDateTime))
+            {
+                FoundedPrice = "Invalid date format.";
+                return;
+            }
+
+            var entry = AssetHistory.FirstOrDefault(e => e.Time.Date == searchDateTime.Date);
+
+            if (entry != null)
+            {
+                FoundedPrice = $"Price on {entry.Time.Date.ToString("yyyy-MM-dd")}: {entry.PriceUsd}";
+            }
+            else
+            {
+                FoundedPrice = $"Price not found for {searchDateTime.Date.ToString("yyyy-MM-dd")}";
+            }
+        }
+        private RelayCommand? _searchPriceCommand;
+        public RelayCommand SearchPriceCommand
+        {
+            get
+            {
+                return _searchPriceCommand ?? (_searchPriceCommand = new RelayCommand(obj => SearchPrice()));
+            }
+        }     
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
