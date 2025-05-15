@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ys1pLY+OwQHA5UYce+gpY9q6k2C0TdtJeKjUuSEZvyzktUrFO7RWSGVvo2ZEUjKmS2jOObIeOzrpFiW/7t/K/w==",
+  "success": true,
+  "projectFilePath": "D:\\My progs\\C#\\CryptoReview(KRS)\\CryptoReview.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
