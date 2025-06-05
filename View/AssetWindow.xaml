@@ -6,36 +6,65 @@
         xmlns:local="clr-namespace:CryptoReview.View"
         xmlns:ViewModel="clr-namespace:CryptoReview.ViewModel"
         mc:Ignorable="d"
-        Title="" Height="650" Width="800"  Background="#2B2B2B">
+        Title="Asset Info"
+        MinWidth="600" MinHeight="700"
+        MaxWidth="800" MaxHeight="800"
+        Width="700" Height="700"
+        Background="#2B2B2B"
+        WindowStartupLocation="CenterScreen">
+
     <Window.Resources>
         <ViewModel:PriceChangeConverter x:Key="PriceChangeConverter"/>
         <ViewModel:ChangeColorConverter x:Key="ChangeColorConverter"/>
         <ViewModel:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
     </Window.Resources>
-    <Grid>
 
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="40" Height="40"/>
-            <RowDefinition MinHeight="60" Height="60"/>
-            <RowDefinition Height="210.00"/>
-            <RowDefinition Height="60.00"/>
-            <RowDefinition MinHeight="200" Height="200"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Image Source="Images/background-2.jpg" Stretch="Fill" Opacity="0.4" Grid.RowSpan="4"/>
-        <!--Grid.Row="0"-->
-        <Button Content="🔄 Update info" Command="{Binding UpdateAssetCommand}"  Margin="662,5,10,0" VerticalAlignment="Top" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="0"/>
-        <!--Grid.Row="1"-->
-        <Grid Margin="0,10,0,10" Height="40" Grid.Row="1">
+
+        <Image Source="Images/background-2.jpg" Stretch="Fill" Opacity="0.2" Grid.RowSpan="5"/>
+
+        <!-- Row 0: Top bar with button -->
+        <DockPanel Grid.Row="0" Margin="10">
+            <Button Content="🔄 Update info"
+                    Command="{Binding UpdateAssetCommand}"
+                    HorizontalAlignment="Right"
+                    Width="140" Height="30"
+                    Background="#3E3E3E" Foreground="White"
+                    FontSize="14" FontWeight="Bold"
+                    DockPanel.Dock="Right"/>
+        </DockPanel>
+
+        <!-- Row 1: Basic asset info -->
+        <Grid Grid.Row="1" Margin="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="110" Width="110*"/>
-                <ColumnDefinition MinWidth="88" Width="88*"/>
-                <ColumnDefinition MinWidth="88" Width="123*"/>
-                <ColumnDefinition MinWidth="435" Width="435*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="{Binding AssetName, FallbackValue=AssetName}"  Foreground="White" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Top" Height="34" Width="100"/>
-            <Label Content="{Binding AssetSymbol, FallbackValue=AssetSymbol}"  Foreground="LightGray" FontSize="12" HorizontalAlignment="Left" Margin="0,6,0,0" VerticalAlignment="Top" Grid.Column="1" Height="24" Width="78"/>
-            <Label Content="Asset Exploerer:"  Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Width="94" Grid.Column="2" Height="24" Margin="19,10,0,0"/>
-            <Label Content="{Binding AssetExplorer, FallbackValue=Value}" MouseLeftButtonDown="LabelUrlClick" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"  Width="459" Grid.Column="3" Height="26">
+
+            <Label Content="{Binding AssetName, FallbackValue=AssetName}"
+                   Foreground="White" FontSize="18" VerticalAlignment="Center"/>
+            <Label Content="{Binding AssetSymbol, FallbackValue=AssetSymbol}"
+                   Foreground="LightGray" FontSize="12" Margin="10,0,0,0"
+                   VerticalAlignment="Center" Grid.Column="1"/>
+            <Label Content="Asset Explorer:" Foreground="White"
+                   VerticalAlignment="Center" Margin="10,0,0,0"
+                   Grid.Column="2"/>
+            <Label Content="{Binding AssetExplorer, FallbackValue=Value}"
+                   MouseLeftButtonDown="LabelUrlClick"
+                   Cursor="Hand"
+                   Foreground="Blue"
+                   VerticalAlignment="Center"
+                   Margin="10,0,0,0"
+                   Grid.Column="3">
                 <Label.Style>
                     <Style TargetType="Label">
                         <Setter Property="Foreground" Value="Blue"/>
@@ -48,85 +77,75 @@
                 </Label.Style>
             </Label>
         </Grid>
-        <!--Grid.Row="2"-->
-        <Grid Margin="10,0,10,0" Height="200" VerticalAlignment="Top" Grid.Row="2">
+
+        <!-- Row 2: Asset metrics grid -->
+        <Grid Grid.Row="2" Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition MinHeight="40" Height="40*"/>
-                <RowDefinition MinHeight="40" Height="40*"/>
-                <RowDefinition MinHeight="40" Height="40*"/>
-                <RowDefinition MinHeight="40" Height="40*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left column labels -->
+            <Label Grid.Row="0" Grid.Column="0" Content="Price (USD)" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="0" Grid.Column="1" Content="{Binding AssetPriceUsd, FallbackValue=Value}" Foreground="White" Margin="5"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Price change (%)" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="{Binding AssetChangePercent24Hr, FallbackValue=Value, Converter={StaticResource PriceChangeConverter}}" Margin="5">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="Foreground">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource ChangeColorConverter}">
+                                    <Binding Path="AssetChangePercent24Hr" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Label.Style>
+            </Label>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Supply" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="{Binding AssetSupply, FallbackValue=Value}" Foreground="White" Margin="5"/>
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Max Supply" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="3" Grid.Column="1" Content="{Binding AssetMaxSupply, FallbackValue=Value}" Foreground="White" Margin="5"/>
+
+            <!-- Right column -->
+            <Label Grid.Row="0" Grid.Column="2" Content="Market cap (USD)" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="0" Grid.Column="3" Content="{Binding AssetMarketCapUsd, FallbackValue=Value}" Foreground="White" Margin="5"/>
+
+            <Label Grid.Row="1" Grid.Column="2" Content="VWAP (24h,USD)" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="1" Grid.Column="3" Content="{Binding AssetVwap24Hr, FallbackValue=Value}" Foreground="White" Margin="5"/>
+
+            <Label Grid.Row="2" Grid.Column="2" Content="Volume (24h,USD)" Foreground="Yellow" Margin="5"/>
+            <Label Grid.Row="2" Grid.Column="3" Content="{Binding AssetVolumeUsd24Hr, FallbackValue=Value}" Foreground="White" Margin="5"/>
+        </Grid>
+
+        <!-- Row 3: Search functionality -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="20,10">
+            <Label Content="Search price for this chart" Foreground="White" VerticalAlignment="Center"/>
+            <TextBox Width="150" Margin="10,0" Text="{Binding SearchingDate}" Background="#3E3E3E" Foreground="White"/>
+            <Button Content="🔍" Command="{Binding SearchPriceCommand}" Width="38" Background="#3E3E3E" Foreground="White"/>
+            <Label Content="{Binding FoundedPrice, FallbackValue='Price'}" Foreground="White" Margin="20,0" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Row 4: Chart -->
+        <Grid Grid.Row="4" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="130" Width="130*"/>
-                <ColumnDefinition MinWidth="230" Width="230*"/>
-                <ColumnDefinition MinWidth="170" Width="170*"/>
-                <ColumnDefinition MinWidth="230" Width="230*"/>
-            </Grid.ColumnDefinitions>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="0" >
-                <Label Content="Price (USD)"  Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="1">
-                <Label Content="{Binding AssetPriceUsd, FallbackValue=Value}"  Foreground="White"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="0">
-                <Label Content="Price change (%)"  Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="1">
-                <Label Content="{Binding AssetChangePercent24Hr, FallbackValue=Value, Converter={StaticResource PriceChangeConverter}}">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource ChangeColorConverter}">
-                                        <Binding Path="AssetChangePercent24Hr" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Label.Style>
-                </Label>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="0">
-                <Label Content="Supply" Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="1">
-                <Label Content="{Binding AssetSupply, FallbackValue=Value}" Foreground="White"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="3" Grid.Column="0" >
-                <Label Content="Max Supply" Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="3" Grid.Column="1">
-                <Label Content="{Binding AssetMaxSupply, FallbackValue=Value}"  Foreground="White"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="2" >
-                <Label Content="Market capitalisation (USD)" Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="0" Grid.Column="3">
-                <Label Content="{Binding AssetMarketCapUsd, FallbackValue=Value}" Foreground="White"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="2">
-                <Label Content="VWAP (24h,USD)" Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="1" Grid.Column="3">
-                <Label Content="{Binding AssetVolumeUsd24Hr, FallbackValue=Value}" Foreground="White"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="2" >
-                <Label Content="Market capitalisation (USD)" Foreground="Yellow"/>
-            </Border>
-            <Border BorderBrush="White" BorderThickness="1" Grid.Row="2" Grid.Column="3">
-                <Label Content="{Binding AssetVwap24Hr, FallbackValue=Value}"  Foreground="White"/>
-            </Border>
+            <Label Content="Price change chart for last 364 days" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            <Canvas x:Name="canvas" Grid.Row="1" Background="White"/>
         </Grid>
-        <!--Grid.Row="3"-->
-        <Label Content="Search price for this chart"  Foreground="White" HorizontalAlignment="Left"  Grid.Row="3" VerticalAlignment="Top" Margin="20,0,0,0" />
-        <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding SearchingDate}" Background="#3E3E3E" Foreground="White" VerticalAlignment="Top" Width="253" Height="22" Grid.Row="3" Margin="19,31,0,0"/>
-        <Button Content="🔍" Command="{Binding SearchPriceCommand}" HorizontalAlignment="Left"  Background="#3E3E3E" Foreground="White"  VerticalAlignment="Top" Height="22" Width="38" Grid.Row="3" Margin="272,31,0,0"/>
-        <Label Content="{Binding FoundedPrice, FallbackValue='Price'}" Foreground="White" HorizontalAlignment="Left"  Grid.Row="3" VerticalAlignment="Top" Margin="353,29,0,0" Width="309" />
-        <!--Grid.Row="4"-->
-        <Canvas x:Name="canvas" Background="White" Grid.Row="4" Height="200" Margin="20,31,20,-31"/>
-
-        <Label Content="Price change chart for last 364 days"  Foreground="White" HorizontalAlignment="Center"  Grid.Row="4" VerticalAlignment="Top" />
     </Grid>
-
 </Window>

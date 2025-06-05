@@ -6,11 +6,42 @@
         xmlns:local="clr-namespace:CryptoReview.View"
         xmlns:ViewModel="clr-namespace:CryptoReview.ViewModel"
         mc:Ignorable="d"
-        Title="" Height="450" Width="842" Background="#2B2B2B">
+        MinHeight="450" MinWidth="720"
+        Title="All Crypto Assets" Height="600" Width="960" Background="#1E1E1E" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:System="clr-namespace:System;assembly=mscorlib">
+            <Style TargetType="Button" x:Key="ModernButton">
+                <Setter Property="Background" Value="#3E3E3E"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Padding" Value="6,2"/>
+                <Setter Property="Margin" Value="5,0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="0" Color="Black" Opacity="0.2"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="1">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#505050"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style x:Key="DataGridStyle" TargetType="{x:Type DataGrid}">
                 <Setter Property="Background" Value="#2B2B2B"/>
                 <Setter Property="Foreground" Value="White"/>
@@ -113,38 +144,94 @@
             <ViewModel:ValueSuffixConverter x:Key="ValueSuffixConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="12">
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="20" Height="67*"/>
-            <RowDefinition MinHeight="20" Height="35*"/>
-            <RowDefinition MinHeight="300" Height="332*"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Top buttons -->
+            <RowDefinition Height="Auto"/>
+            <!-- Search -->
+            <RowDefinition Height="*"/>
+            <!-- Table -->
         </Grid.RowDefinitions>
-        <Image Source="Images/background-2.jpg" Stretch="Fill"  Opacity="0.4" Grid.RowSpan="3" />
-        <Button Content="Back to main menu" Command= "{Binding GoToMainMenuCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Margin="676,10,10,0" VerticalAlignment="Top" Height="24" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold" Grid.Row="0"/>
-        <Button Content="🔄 Update info" Command="{Binding UpdateAllAssetsCommand}"  Margin="10,0,700,0" VerticalAlignment="Center" Height="25" Background="#3E3E3E" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Button Content="🔍" Command="{Binding SearchAssetCommand}" HorizontalAlignment="Left"  Background="#3E3E3E" Foreground="White"  VerticalAlignment="Top" Height="22" Width="39" Grid.Row="1" Margin="550,1,0,0"/>
-        <TextBox HorizontalAlignment="Center"  TextWrapping="Wrap" Text="{Binding SearchText}" Background="#3E3E3E" Foreground="White" VerticalAlignment="Top" Width="253" Height="22" Grid.Row="1"/>
-        <DataGrid ItemsSource="{Binding AllAssets}" Style="{StaticResource DataGridStyle}" Margin="12,10,8,10" AutoGenerateColumns="False" Grid.Row="2">
+
+        <!-- Фон -->
+        <Image Source="Images/background-2.jpg"
+           Stretch="Fill"
+           Opacity="0.2"
+           Grid.RowSpan="3"
+           Panel.ZIndex="-1"/>
+
+        <!-- Верхние кнопки -->
+        <StackPanel Orientation="Horizontal"
+                Grid.Row="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,10,0,10">
+            <Button Content="🔄 Update info"
+                Style="{StaticResource ModernButton}"
+                Command="{Binding UpdateAllAssetsCommand}"/>
+            <Button Content="Back to main menu"
+                Style="{StaticResource ModernButton}"
+                Command="{Binding GoToMainMenuCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+        </StackPanel>
+
+        <!-- Поиск -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Margin="10,0,0,10">
+            <TextBox Width="250"
+             Height="26"
+             VerticalAlignment="Center"
+             Text="{Binding SearchText}"
+             Background="#3E3E3E"
+             Foreground="White"
+             FontSize="13"
+             Padding="6,2"
+             BorderBrush="Transparent"
+             BorderThickness="0"/>
+            <Button Content="🔍"
+            Width="36"
+            Height="26"
+            Margin="8,0,0,0"
+            Background="#3E3E3E"
+            Foreground="White"
+            FontSize="14"
+            FontWeight="Bold"
+            Command="{Binding SearchAssetCommand}"/>
+        </StackPanel>
+
+        <!-- Таблица -->
+        <DataGrid Grid.Row="2"
+              ItemsSource="{Binding AllAssets}"
+              Style="{StaticResource DataGridStyle}"
+              AutoGenerateColumns="False"
+              Margin="0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              HeadersVisibility="Column"
+              SelectionMode="Single"
+              SelectionUnit="FullRow"
+              CanUserResizeColumns="True"
+              CanUserResizeRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="#" Binding="{Binding Rank}"/>
-                <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Price (USD)" Binding="{Binding PriceUsd, Converter={StaticResource ValueSuffixConverter}}"/>
+                <DataGridTextColumn Header="#" Binding="{Binding Rank}" />
+                <DataGridTextColumn Header="Asset" Binding="{Binding Symbol}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Price (USD)" Binding="{Binding PriceUsd, Converter={StaticResource ValueSuffixConverter}}" />
                 <DataGridTextColumn Header="Price Change (%,24h)" Binding="{Binding ChangePercent24Hr, Converter={StaticResource PriceChangeConverter}}">
                     <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
+                        <Style TargetType="TextBlock">
                             <Setter Property="Foreground">
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource ChangeColorConverter}">
-                                        <Binding Path="ChangePercent24Hr" />
+                                        <Binding Path="ChangePercent24Hr"/>
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="MCAP (USD)" Binding="{Binding MarketCapUsd, Converter={StaticResource ValueSuffixConverter}}"/>
-                <DataGridTextColumn Header="Trading volume (USD,24h)" Binding="{Binding VolumeUsd24Hr, Converter={StaticResource ValueSuffixConverter}}"/>
+                <DataGridTextColumn Header="MCAP (USD)" Binding="{Binding MarketCapUsd, Converter={StaticResource ValueSuffixConverter}}" />
+                <DataGridTextColumn Header="Trading volume (USD,24h)" Binding="{Binding VolumeUsd24Hr, Converter={StaticResource ValueSuffixConverter}}" />
                 <DataGridTemplateColumn Header="Supply">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -157,8 +244,11 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
+
             <DataGrid.InputBindings>
-                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenAssetWindowCommand}" CommandParameter="{Binding SelectedItem.Id, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                <MouseBinding Gesture="LeftDoubleClick"
+                          Command="{Binding OpenAssetWindowCommand}"
+                          CommandParameter="{Binding SelectedItem.Id, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
             </DataGrid.InputBindings>
         </DataGrid>
     </Grid>
