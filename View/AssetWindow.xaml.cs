@@ -28,7 +28,7 @@ namespace CryptoReview.View
         private async void LoadDataAsync(AssetViewModel viewModel, string assetName)
         {
             await viewModel.UpdateAsset(assetName);
-            DrawGraph(); 
+            canvas.Loaded += (s, e) => DrawGraph();
         }
         public void DrawGraph()
         {
